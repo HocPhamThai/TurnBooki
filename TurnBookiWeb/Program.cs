@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using TurnBookiWeb.Data;
+using TurnBooki.Business.Services;
+using TurnBooki.Business.Services.IServices;
+using TurnBooki.DataAccess.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     // options.UseSqlite(builder.Configuration.GetSection("ConnectionStrings:DefaultConnection").Value);
 });
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 

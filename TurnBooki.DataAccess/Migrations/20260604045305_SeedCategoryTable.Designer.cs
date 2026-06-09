@@ -4,15 +4,16 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TurnBookiWeb.Data;
+using TurnBooki.DataAccess.Data;
+
 
 #nullable disable
 
 namespace TurnBookiWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260603150116_UpdateIdCategoryInDB")]
-    partial class UpdateIdCategoryInDB
+    [Migration("20260604045305_SeedCategoryTable")]
+    partial class SeedCategoryTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +40,23 @@ namespace TurnBookiWeb.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "SciFi"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "History"
+                        });
                 });
 #pragma warning restore 612, 618
         }

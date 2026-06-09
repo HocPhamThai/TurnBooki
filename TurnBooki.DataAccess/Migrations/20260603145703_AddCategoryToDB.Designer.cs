@@ -4,15 +4,16 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TurnBookiWeb.Data;
+using TurnBooki.DataAccess.Data;
+
 
 #nullable disable
 
 namespace TurnBookiWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260604052425_AddDisplayOrderInCategory")]
-    partial class AddDisplayOrderInCategory
+    [Migration("20260603145703_AddCategoryToDB")]
+    partial class AddCategoryToDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,42 +27,19 @@ namespace TurnBookiWeb.Migrations
 
             modelBuilder.Entity("TurnBookiWeb.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CategoryIdentification")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryIdentification"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CategoryIdentification");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DisplayOrder = 1,
-                            Name = "Action"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DisplayOrder = 2,
-                            Name = "SciFi"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DisplayOrder = 3,
-                            Name = "History"
-                        });
                 });
 #pragma warning restore 612, 618
         }

@@ -1,25 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TurnBookiWeb.Data;
-using TurnBookiWeb.Models;
+using TurnBooki.Business.Services.IServices;
+using TurnBooki.DataAccess.Data;
+using TurnBooki.Models;
 
 namespace TurnBookiWeb.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext context;
+        public readonly ICategoryService categoryService;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoryController(ICategoryService categoryService)
         {
-            this.context = context;
+            this.categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var categories = this.context.Categories.ToList();
+            var categories = await this.categoryService.GetAllCategoriesAsync();
             return View(categories);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             return View();
         }
@@ -27,17 +28,16 @@ namespace TurnBookiWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Create")]
-        public IActionResult CreatePost(Category category)
+        public async Task<IActionResult> CreatePost(Category category)
         {
-            if (!string.IsNullOrEmpty(category.Name) && this.context.Categories.Any(c => c.Name.ToLower() == category.Name.ToLower()))
+            if (!string.IsNullOrEmpty(category.Name) && !await this.categoryService.IsCategoryNameUniqueAsync(category.Name))
             {
                 ModelState.AddModelError("", "Category name already exists.");
             }
             
             if (ModelState.IsValid)
             {
-                this.context.Categories.Add(category);
-                this.context.SaveChanges();
+                await this.categoryService.CreateCategoryAsync(category);
                 TempData["success"] = "Category created successfully.";
                 return RedirectToAction("Index");
             }
@@ -45,14 +45,14 @@ namespace TurnBookiWeb.Controllers
             return View();
         }
 
-        public IActionResult Update(int? id)
+        public async Task<IActionResult> Update(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            var category = this.context.Categories.Find(id);
+            var category = await this.categoryService.GetCategoryByIdAsync(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -64,18 +64,17 @@ namespace TurnBookiWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Update")]
-        public IActionResult UpdatePost(Category category)
+        public async Task<IActionResult> UpdatePost(Category category)
         {
             if (!string.IsNullOrEmpty(category.Name) &&
-                this.context.Categories.Any(c => c.Name.ToLower() == category.Name.ToLower() && c.Id != category.Id))
+                !await categoryService.IsCategoryNameUniqueAsync(category.Name, category.Id))
             {
                 ModelState.AddModelError("", "Category name already exists.");
             }
 
             if (ModelState.IsValid)
             {
-                this.context.Categories.Update(category);
-                this.context.SaveChanges();
+                await categoryService.UpdateCategoryAsync(category);
                 TempData["success"] = "Category updated successfully.";
                 return RedirectToAction("Index");
             }
@@ -83,14 +82,14 @@ namespace TurnBookiWeb.Controllers
             return View();
         }
 
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            var category = this.context.Categories.Find(id);
+            var category = await this.categoryService.GetCategoryByIdAsync(id.Value);
             if (category == null)
             {
                 return NotFound();
@@ -102,16 +101,11 @@ namespace TurnBookiWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
-        public IActionResult DeletePost(int? id)
+        public async Task<IActionResult> DeletePost(int id)
         {
-            var category = this.context.Categories.Find(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+            var category = await this.categoryService.GetCategoryByIdAsync(id);
 
-            this.context.Categories.Remove(category);
-            this.context.SaveChanges();
+            await categoryService.DeleteCategoryAsync(id);
             TempData["success"] = "Category deleted successfully.";
 
             return RedirectToAction("Index");

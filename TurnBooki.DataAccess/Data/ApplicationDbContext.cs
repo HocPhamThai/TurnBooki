@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TurnBookiWeb.Models;
+using TurnBooki.Models;
 
-namespace TurnBookiWeb.Data
+namespace TurnBooki.DataAccess.Data
 {
     public class ApplicationDbContext : DbContext
     {

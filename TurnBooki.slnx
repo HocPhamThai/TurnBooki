@@ -1,3 +1,7 @@
 <Solution>
+  <Project Path="TurnBooki.Business/TurnBooki.Business.csproj" Id="3e88ba27-dc4d-44a2-a4f6-c41fe8bd237f" />
+  <Project Path="TurnBooki.DataAccess/TurnBooki.DataAccess.csproj" Id="14447ef6-10cd-4764-a6e5-ca65c664849a" />
+  <Project Path="TurnBooki.Models/TurnBooki.Models.csproj" Id="d447bb97-6853-433b-a997-ebc79e64aa68" />
+  <Project Path="TurnBooki.Utility/TurnBooki.Utility.csproj" Id="05378d1d-4d84-4d6e-9940-710c9dab52ae" />
   <Project Path="TurnBookiWeb/TurnBookiWeb.csproj" />
 </Solution>

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TurnBookiWeb.Models
+namespace TurnBooki.Models
 {
     public class Category
     {
